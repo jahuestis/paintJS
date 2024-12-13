@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>paintJS</title>
+        <link rel="stylesheet" href="styles.css">
+        
+    </head>
+
+    <body>
+
+        <h1>paintJS</h1>
+        <canvas id="canvas"></canvas>
+
+        <div id="controls">
+            <label class="red">
+                <input type="radio" value="red" name="color"> Red
+            </label>
+            <label class="orange">
+                <input type="radio" value="orange" name="color"> Orange
+            </label>
+            <label class="yellow">
+                <input type="radio" value="yellow" name="color"> Yellow
+            </label>
+            <label  class="lime">
+                <input type="radio" value="lime" name="color" checked> Lime
+            </label>
+            <label  class="cyan">
+                <input type="radio" value="cyan" name="color"> Cyan
+            </label>
+            <label  class="magenta">
+                <input type="radio" value="magenta" name="color"> Magenta
+            </label>
+            <label  class="white">
+                <input type="radio" value="white" name="color"> White
+            </label>
+            <label  class="black">
+                <input type="radio" value="black" name="color"> Black
+            </label>
+
+            <br>
+            <label>
+                <h3 id="brushLabel">Brush Size: 10</h3>
+                <input type="range" min="1" max="50" value="10" id="sizeSlider">
+            </label>
+            <br>
+            <button id="clear">Clear</button>
+
+        </div>
+
+        <script src="paint.js"></script>
+    </body>
+</html>
+
+</DOCTYPE>
