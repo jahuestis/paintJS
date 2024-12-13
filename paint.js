@@ -9,11 +9,13 @@ var brushLabel = document.getElementById("brushLabel");
 var sizeSlider = document.getElementById("sizeSlider");
 var clearButton = document.getElementById("clear");
 
+// Set up clear button
 clearButton.addEventListener('click', function() {
     context.clearRect(0, 0, canvasWidth, canvasHeight);
     imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 });
 
+// Set up color selection
 var colors = document.getElementsByName("color");
 var colorSelected;
 colors.forEach(color => {
@@ -25,8 +27,8 @@ colors.forEach(color => {
     });
 });
 
+// Set up mouse and brush
 var brushSize;
-
 var mouseDown;
 document.addEventListener('mousedown', function() {
     mouseDown = true;
@@ -36,17 +38,19 @@ document.addEventListener('mouseup', function() {
     mouseDown = false;
 });
 
-var brushX;
-var brushY;
+var drawX = 0;
+var drawY = 0;
+var mouseX = 0;
+var mouseY = 0;
 document.addEventListener('mousemove', function(event) {
     bounds = canvas.getBoundingClientRect();
     scaleX = canvas.width / bounds.width;
     scaleY = canvas.height / bounds.height;
-    brushX = (event.clientX - bounds.left) * scaleX;
-    brushY = (event.clientY - bounds.top) * scaleY;
+    mouseX = (event.clientX - bounds.left) * scaleX;
+    mouseY = (event.clientY - bounds.top) * scaleY;
 });
 
-
+// -- Main Code --
 window.onload = function() {
     canvas = document.getElementById("canvas");
     canvas.width= canvasWidth;
@@ -67,13 +71,17 @@ function update() {
     }
 
     // draw on the canvas
+    var drawXPrev = drawX;
+    var drawYPrev = drawY;
+    drawX = mouseX;
+    drawY = mouseY;
     context.putImageData(imageData, 0, 0);
-    if (brushX > 0 && brushY > 0 && brushX < canvas.width && brushY < canvas.height) {
+    if (mouseX > 0 && mouseY > 0 && mouseX < canvas.width && mouseY < canvas.height) {
         if (mouseDown) {
-            paint(brushX, brushY, brushSize, colorSelected);
+            drawPath(drawXPrev, drawYPrev, drawX, drawY, brushSize, colorSelected);
             imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         }
-        paint(brushX, brushY, brushSize, colorSelected);
+        drawPath(drawX, drawY, drawX, drawY, brushSize, colorSelected);
     }
     
     
@@ -81,12 +89,16 @@ function update() {
     requestAnimationFrame(update);
 }
 
-function paint(x, y, brushSize, color) {
-    context.imageSmoothingEnabled = false;
-    context.fillStyle = color;
-    context.beginPath();
-    context.arc(x, y, brushSize, 0, Math.PI * 2);  // x, y, radius, start angle, end angle
-    context.fill();  // Fill the circle with the current fill style
-}
+function drawPath(startX, startY, endX, endY, brushSize, color) {
+    // Set the properties for the stroke
+    context.lineWidth = brushSize;
+    context.lineCap = 'round';
+    context.strokeStyle = color;
 
+    // Begin the path and draw the line
+    context.beginPath();
+    context.moveTo(startX, startY);
+    context.lineTo(endX, endY);
+    context.stroke();
+}
 
